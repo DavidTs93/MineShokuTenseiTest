@@ -6,7 +6,7 @@
     <groupId>me.DMan16</groupId>
     <artifactId>MineShokuTenseiBackpack</artifactId>
     <description>MineShoku Tensei backpack plugin by DMan16</description>
-    <version>1.0</version>
+    <version>2.0</version>
     <packaging>jar</packaging>
     <developers>
         <developer>
@@ -45,7 +45,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <finalName>${project.name}</finalName>
+                    <finalName>${project.name}-${project.version}</finalName>
+                    <outputDirectory>/g/TestServer/plugins</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
@@ -133,21 +134,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>24.0.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>5.0.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.checkerframework</groupId>
-            <artifactId>checker-qual</artifactId>
-            <version>3.49.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
