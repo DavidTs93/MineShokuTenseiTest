@@ -46,7 +46,6 @@
                 </executions>
                 <configuration>
                     <finalName>${project.name}-${project.version}</finalName>
-                    <outputDirectory>/g/TestServer/plugins</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
