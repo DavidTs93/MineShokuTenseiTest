@@ -8,7 +8,7 @@ on:
 
 env:
     PROJECT_NAME: MSTBackpack
-    JAR_REGEX: ${{ env.PROJECT_NAME }}-*.jar
+    JAR_REGEX: MSTBackpack-*.jar
 
 permissions:
     contents: write  # required for releases
@@ -50,7 +50,7 @@ jobs:
               if: github.ref == 'refs/heads/master'
               id: jar_master
               run: |
-                  renamed_jar_file="$(dirname "${{ steps.jar.outputs.jar_file }}")/MSTBackpack-${{ steps.get_version.outputs.version }}.jar"
+                  renamed_jar_file="$(dirname "${{ steps.jar.outputs.jar_file }}")/${{ env.PROJECT_NAME }}-${{ steps.get_version.outputs.version }}.jar"
                   mv -f "${{ steps.jar.outputs.jar_file }}" "$renamed_jar_file"
                   echo "jar_file=$renamed_jar_file" >> "$GITHUB_OUTPUT"
 
