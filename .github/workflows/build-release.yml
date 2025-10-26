@@ -47,7 +47,7 @@ jobs:
               with:
                   name: build-${{ github.ref_name }}
                   path: ${{ steps.jar.outputs.jar_file }}
-                  retention-days: 1
+                  retention-days: 7
 
     release:
         if: github.ref == 'refs/heads/master'
@@ -57,7 +57,7 @@ jobs:
             - name: Download built artifact
               uses: actions/download-artifact@v4
               with:
-                  name: artifact-master
+                  name: build-master
 
             - name: Create GitHub Release
               uses: softprops/action-gh-release@v2
