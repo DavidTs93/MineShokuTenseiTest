@@ -14,7 +14,7 @@
         </developer>
     </developers>
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <minecraft.version>1.21.4-R0.1-SNAPSHOT</minecraft.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jar.suffix></jar.suffix>
