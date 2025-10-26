@@ -1,12 +1,9 @@
-name: Release
+name: Build JAR
 
 on:
-    push:
-        branches:
-            - master
+    workflow_dispatch:  # allows manual trigger from any branch
 
 permissions:
-    contents: write  # required for releases
     actions: write   # required for artifact upload
 
 jobs:
@@ -47,26 +44,3 @@ jobs:
                   name: build-${{ github.ref_name }}
                   path: ${{ steps.jar.outputs.jar_file }}
                   retention-days: 14
-
-    release:
-        needs: build
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-
-            - name: Download built artifact
-              uses: actions/download-artifact@v4
-              with:
-                  name: build-master
-
-            - name: Create GitHub Release
-              uses: softprops/action-gh-release@v2
-              with:
-                  tag_name: "v${{ needs.build.outputs.version }}"
-                  name: "Release v${{ needs.build.outputs.version }}"
-                  body: |
-                      🚀 **Automatic release from master**
-                      
-                      **Version:** v${{ needs.build.outputs.version }}
-                  files: "*.jar"
