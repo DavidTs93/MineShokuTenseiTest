@@ -15,8 +15,8 @@ public record Pair<V, T>(V first, T second) {
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
-		if (!(obj instanceof Pair<?, ?> pair)) return false;
-		return Objects.equals(this.first, pair.first) && Objects.equals(this.second, pair.second);
+		if (!(obj instanceof Pair<?, ?>(Object o1, Object o2))) return false;
+		return Objects.equals(this.first, o1) && Objects.equals(this.second, o2);
 	}
 
 	public int hashCode() {
