@@ -94,43 +94,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>net.md-5</groupId>
-                    <artifactId>specialsource-maven-plugin</artifactId>
-                    <version>1.2.3</version>
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>remap</goal>
-                            </goals>
-                            <id>remap-obf</id>
-                            <configuration>
-                                <srgIn>org.spigotmc:minecraft-server:${minecraft.version}:txt:maps-mojang</srgIn>
-                                <reverse>true</reverse>
-                                <remappedDependencies>org.spigotmc:spigot:${minecraft.version}:jar:remapped-mojang</remappedDependencies>
-                                <remappedArtifactAttached>true</remappedArtifactAttached>
-                                <remappedClassifierName>remapped-obf</remappedClassifierName>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>remap</goal>
-                            </goals>
-                            <id>remap-spigot</id>
-                            <configuration>
-                                <inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
-                                <srgIn>org.spigotmc:minecraft-server:${minecraft.version}:csrg:maps-spigot</srgIn>
-                                <remappedDependencies>org.spigotmc:spigot:${minecraft.version}:jar:remapped-obf</remappedDependencies>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
     <profiles>
         <profile>
@@ -147,13 +110,13 @@
         </profile>
     </profiles>
     <repositories>
-        <repository><!--Mojang Libs-->
-            <id>mojang</id>
-            <url>https://libraries.minecraft.net/</url>
-        </repository>
         <repository><!--PaperMC-->
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository><!--Mojang Libs-->
+            <id>mojang</id>
+            <url>https://libraries.minecraft.net/</url>
         </repository>
         <repository><!--MMOProfile-->
             <id>phoenix</id>
@@ -177,19 +140,6 @@
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
             <version>${minecraft.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>${minecraft.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>${minecraft.version}</version>
-            <classifier>remapped-mojang</classifier>
             <scope>provided</scope>
         </dependency>
         <dependency>
