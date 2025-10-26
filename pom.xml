@@ -47,6 +47,7 @@
                 </executions>
                 <configuration>
                     <finalName>${project.name}-${project.version}${jar.suffix}</finalName>
+                    <outputDirectory>.</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
