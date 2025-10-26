@@ -1,4 +1,4 @@
-name: Release
+name: Build
 
 on:
     push:
@@ -42,12 +42,31 @@ jobs:
               id: jar
               run: echo "jar_file=$(find . -maxdepth 1 -type f -name '*.jar' | head -n 1)" >> "$GITHUB_OUTPUT"
 
+            - name: Rename master JAR
+              if: github.ref == 'refs/heads/master'
+              id: jar_master
+              run: |
+                  renamed_jar_file="$(dirname "${{ steps.jar.outputs.jar_file }}")/MSTBackpack-${{ steps.get_version.outputs.version }}.jar"
+                  mv -f "${{ steps.jar.outputs.jar_file }}" "$renamed_jar_file"
+                  echo "jar_file=$renamed_jar_file" >> "$GITHUB_OUTPUT"
+
+            - name: Set final JAR path
+              id: jar_final
+              run: |
+                  if [ "${{ steps.jar_master.outcome }}" = "success" ]; then
+                    echo "jar_file=${{ steps.jar_master.outputs.jar_file }}" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "jar_file=${{ steps.jar.outputs.jar_file }}" >> "$GITHUB_OUTPUT"
+                  fi
+
             - name: Upload JAR as artifact
               uses: actions/upload-artifact@v4
               with:
                   name: build-${{ github.ref_name }}
-                  path: ${{ steps.jar.outputs.jar_file }}
-                  retention-days: 7
+                  path: ${{ steps.jar_final.outputs.jar_file }}
+                  overwrite: false
+                  if-no-files-found: error
+                  retention-days: 2
 
     release:
         if: github.ref == 'refs/heads/master'
@@ -65,7 +84,9 @@ jobs:
                   tag_name: "v${{ needs.build.outputs.version }}"
                   name: "Release v${{ needs.build.outputs.version }}"
                   body: |
-                      🚀 **Automatic release from master**
-                      
-                      **Version:** v${{ needs.build.outputs.version }}
-                  files: "*.jar"
+                      🚀 **v${{ needs.build.outputs.version }}**
+
+                  files: "MSTBackpack-*.jar"
+                  overwrite_files: false
+                  fail_on_unmatched_files: true
+                  generate_release_notes: true
