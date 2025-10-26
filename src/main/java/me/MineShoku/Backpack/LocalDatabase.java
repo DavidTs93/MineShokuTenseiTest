@@ -52,6 +52,6 @@ public final class LocalDatabase extends Database {
 	@NotNull
 	protected String onConflictUpdateExtras(@NonNegative int max, boolean includeProfileID) {
 		String[] keys = includeProfileID ? new String[]{COLUMN_PLAYER_ID, COLUMN_PROFILE_ID} : new String[]{COLUMN_PLAYER_ID};
-		return onConflictUpdate(COLUMN_EXTRAS + "=MIN(MAX(" + TABLE_PLAYERS + "." + COLUMN_EXTRAS + " + excluded." + COLUMN_EXTRAS + "), 0), " + max + ")", keys);
+		return onConflictUpdate(COLUMN_EXTRAS + "=MIN(MAX(" + TABLE_PLAYERS + "." + COLUMN_EXTRAS + " + excluded." + COLUMN_EXTRAS + ", 0), " + max + ")", keys);
 	}
 }
