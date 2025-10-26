@@ -97,11 +97,11 @@
     </build>
     <profiles>
         <profile>
-            <id>non-main</id>
+            <id>non-master</id>
             <activation>
                 <property>
-                    <name>Non-main suffix</name>
-                    <value>!main</value>
+                    <name>Non-master suffix</name>
+                    <value>!master</value>
                 </property>
             </activation>
             <properties>
