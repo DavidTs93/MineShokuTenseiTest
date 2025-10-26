@@ -3,7 +3,7 @@ name: Build & Release
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:  # allows manual trigger from any branch
 
 permissions:
@@ -50,7 +50,7 @@ jobs:
           retention-days: 14
 
   release:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -60,7 +60,7 @@ jobs:
       - name: Download built artifact
         uses: actions/download-artifact@v4
         with:
-          name: build-main
+          name: build-master
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -68,7 +68,7 @@ jobs:
           tag_name: "v${{ needs.build.outputs.version }}"
           name: "Release v${{ needs.build.outputs.version }}"
           body: |
-            🚀 **Automatic release from main**
+            🚀 **Automatic release from master**
 
             **Version:** v${{ needs.build.outputs.version }}
           files: "*.jar"
