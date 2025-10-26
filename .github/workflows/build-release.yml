@@ -24,6 +24,7 @@ permissions:
 
 jobs:
     build:
+        if: github.event_name != 'pull_request' || github.event.pull_request.merged == true
         runs-on: ubuntu-latest
         outputs:
             version: ${{ steps.get_version.outputs.version }}
