@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - master
+    workflow_dispatch:  # allows manual trigger from any branch
 
 permissions:
     contents: write  # required for releases
@@ -12,6 +13,8 @@ permissions:
 jobs:
     build:
         runs-on: ubuntu-latest
+        outputs:
+            version: ${{ steps.get_version.outputs.version }}
 
         steps:
             - name: Checkout repository
@@ -28,37 +31,33 @@ jobs:
 
             - name: Extract project version from POM
               id: get_version
-              run: |
-                  VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-                  echo "version=$VERSION" >> $GITHUB_OUTPUT
+              uses: dostonhamrakulov/maven-artifact-version-extractor@v1.0
+              with:
+                  file_path: ${{ github.workspace }}/pom.xml
 
             - name: Build with Maven
               run: mvn -B clean package
 
             - name: Find built JAR
               id: jar
-              run: |
-                  JAR_FILE=$(find target -maxdepth 1 -type f -name "*.jar" | head -n 1)
-                  echo "jar_file=$JAR_FILE" >> $GITHUB_OUTPUT
+              run: echo "jar_file=$(find . -maxdepth 1 -type f -name '*.jar' | head -n 1)" >> "$GITHUB_OUTPUT"
 
             - name: Upload JAR as artifact
               uses: actions/upload-artifact@v4
               with:
                   name: build-${{ github.ref_name }}
                   path: ${{ steps.jar.outputs.jar_file }}
-                  retention-days: 14
+                  retention-days: 1
 
     release:
+        if: github.ref == 'refs/heads/master'
         needs: build
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-
             - name: Download built artifact
               uses: actions/download-artifact@v4
               with:
-                  name: build-master
+                  name: artifact-master
 
             - name: Create GitHub Release
               uses: softprops/action-gh-release@v2
