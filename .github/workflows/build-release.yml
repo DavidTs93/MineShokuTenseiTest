@@ -1,18 +1,26 @@
 name: Build
 
 on:
-    push:
+    pull_request:
         branches:
             - master
-    workflow_dispatch:  # allows manual trigger from any branch
+        types:
+            - closed
+    workflow_dispatch:
+        inputs:
+            release:
+                description: "Create a release"
+                required: false
+                default: false
+                type: boolean
 
 env:
     PROJECT_NAME: MSTBackpack
     JAR_REGEX: MSTBackpack-*.jar
 
 permissions:
-    contents: write  # required for releases
-    actions: write   # required for artifact upload
+    contents: write
+    actions: write
 
 jobs:
     build:
@@ -73,7 +81,13 @@ jobs:
                   retention-days: 2
 
     release:
-        if: github.ref == 'refs/heads/master'
+        if: |
+            github.ref == 'refs/heads/master' &&
+            (
+                (github.event_name == 'workflow_dispatch' && inputs.release == true) ||
+                (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+            )
+        permissions: write-all
         needs: build
         runs-on: ubuntu-latest
         steps:
@@ -98,7 +112,7 @@ jobs:
               uses: softprops/action-gh-release@v2
               with:
                   tag_name: "v${{ needs.build.outputs.version }}"
-                  name: "Release v${{ needs.build.outputs.version }}"
+                  name: "v${{ needs.build.outputs.version }}"
                   body: |
                       🚀 **v${{ needs.build.outputs.version }}**
 
